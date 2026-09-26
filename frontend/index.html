@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>LexGuide AI — Legal Intelligence &amp; Action Assistant</title>
+<link rel="stylesheet" href="styles.css?v=guided-demo-fix" />
+</head>
+<body>
+<a href="#main" class="skip-link">Skip to main content</a>
+
+<header class="topbar" role="banner">
+  <div class="brand">
+    <span class="brand-mark" aria-hidden="true">⚖</span>
+    <div>
+      <div class="brand-name">LexGuide AI</div>
+      <div class="brand-tagline">Understand the document. See the risks. Know what to ask next.</div>
+    </div>
+  </div>
+  <div class="topbar-actions">
+    <label class="jurisdiction-select">
+      Jurisdiction:
+      <select id="jurisdictionSelect">
+        <option value="Not specified">Not specified</option>
+        <option value="India" selected>India</option>
+        <option value="United States">United States</option>
+        <option value="United Kingdom">United Kingdom</option>
+        <option value="Other">Other</option>
+      </select>
+    </label>
+    <button id="accessibilityToggle" class="btn btn-ghost" aria-pressed="false">Accessibility Mode</button>
+    <button id="guidedDemoBtn" class="btn btn-primary">▶ Guided Demo</button>
+  </div>
+</header>
+
+<nav class="tabs" role="tablist" aria-label="Main navigation">
+  <button class="tab active" data-tab="dashboard" role="tab" aria-selected="true">Dashboard</button>
+  <button class="tab" data-tab="documents" role="tab" aria-selected="false">Documents</button>
+  <button class="tab" data-tab="workspace" role="tab" aria-selected="false">Workspace</button>
+  <button class="tab" data-tab="compare" role="tab" aria-selected="false">Compare</button>
+  <button class="tab" data-tab="ask" role="tab" aria-selected="false">Ask</button>
+  <button class="tab" data-tab="actionplan" role="tab" aria-selected="false">Action Plan</button>
+  <button class="tab" data-tab="brief" role="tab" aria-selected="false">Consultation Brief</button>
+  <button class="tab" data-tab="privacy" role="tab" aria-selected="false">Privacy &amp; Settings</button>
+</nav>
+
+<main id="main" role="main">
+
+  <!-- DASHBOARD -->
+  <section id="tab-dashboard" class="tab-panel active">
+    <h1>Your Legal Workspace</h1>
+    <p class="muted">LexGuide AI provides legal information and document assistance. It does not provide legal representation or replace a qualified legal professional.</p>
+
+    <div class="quick-actions">
+      <button class="qa-card" data-goto="documents">📄<span>Upload Document</span></button>
+      <button class="qa-card" data-goto="compare">🔀<span>Compare Documents</span></button>
+      <button class="qa-card" data-goto="ask">💬<span>Ask a Question</span></button>
+      <button class="qa-card" data-goto="brief">🧾<span>Prepare Legal Brief</span></button>
+    </div>
+
+    <div class="dash-grid">
+      <div class="card">
+        <h2>Recent Documents</h2>
+        <div id="dashRecentDocs" class="doc-list"></div>
+      </div>
+      <div class="card">
+        <h2>Attention Areas</h2>
+        <div id="dashAttention" class="stat-block">No documents analyzed yet.</div>
+      </div>
+      <div class="card">
+        <h2>Upcoming / Detected Deadlines</h2>
+        <div id="dashDeadlines" class="stat-block">No documents analyzed yet.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DOCUMENTS -->
+  <section id="tab-documents" class="tab-panel">
+    <h1>Documents</h1>
+    <div id="dropzone" class="dropzone" tabindex="0" role="button" aria-label="Upload a document by dragging it here or pressing Enter to browse files">
+      <p><strong>Drag &amp; drop</strong> a PDF, DOCX, TXT or Markdown file here, or click to browse.</p>
+      <p class="muted small">Documents are processed for analysis only. See Privacy &amp; Settings to delete data.</p>
+      <input type="file" id="fileInput" accept=".pdf,.docx,.txt,.md" hidden />
+    </div>
+
+    <h2>Load a demo document</h2>
+    <div class="demo-doc-buttons">
+      <button class="btn btn-secondary" data-demo="employment_v1">Employment Agreement (v1)</button>
+      <button class="btn btn-secondary" data-demo="employment_v2">Employment Agreement (v2)</button>
+      <button class="btn btn-secondary" data-demo="nda">NDA</button>
+      <button class="btn btn-secondary" data-demo="rental">Rental Agreement</button>
+    </div>
+
+    <h2>Uploaded Documents</h2>
+    <table class="doc-table" id="docTable">
+      <thead><tr><th>Name</th><th>Type</th><th>Pages</th><th>Words</th><th>Status</th><th>Actions</th></tr></thead>
+      <tbody></tbody>
+    </table>
+  </section>
+
+  <!-- WORKSPACE (split pane) -->
+  <section id="tab-workspace" class="tab-panel">
+    <h1>Document Workspace</h1>
+    <div class="workspace-select">
+      <label for="workspaceDocSelect">Document:</label>
+      <select id="workspaceDocSelect"></select>
+    </div>
+    <div class="workspace-grid">
+      <div class="pane outline-pane">
+        <h3>Outline / Document Map</h3>
+        <div id="docMap" class="doc-map"></div>
+      </div>
+      <div class="pane viewer-pane">
+        <h3>Document Viewer <span class="muted small" id="ocrBadge"></span></h3>
+        <div id="docViewer" class="doc-viewer"></div>
+      </div>
+      <div class="pane insights-pane">
+        <div class="insight-tabs" role="tablist">
+          <button class="itab active" data-itab="summary">Summary</button>
+          <button class="itab" data-itab="risks">Risks</button>
+          <button class="itab" data-itab="obligations">Obligations</button>
+          <button class="itab" data-itab="dates">Dates</button>
+          <button class="itab" data-itab="health">Health</button>
+        </div>
+        <div id="insight-summary" class="insight-body active"></div>
+        <div id="insight-risks" class="insight-body"></div>
+        <div id="insight-obligations" class="insight-body"></div>
+        <div id="insight-dates" class="insight-body"></div>
+        <div id="insight-health" class="insight-body"></div>
+      </div>
+    </div>
+    <div id="clauseDetailPanel" class="clause-detail" hidden></div>
+
+    <div class="card glossary-card">
+      <h2>Legal Term Explainer</h2>
+      <p class="muted small">Select a term to see a plain-language definition and how it actually appears in this document.</p>
+      <div class="glossary-controls">
+        <select id="glossaryTermSelect"></select>
+        <button class="btn btn-secondary" id="glossaryLookupBtn">Explain</button>
+      </div>
+      <div id="glossaryResult"></div>
+    </div>
+  </section>
+
+  <!-- COMPARE -->
+  <section id="tab-compare" class="tab-panel">
+    <h1>Compare Documents</h1>
+    <div class="compare-select">
+      <label>Document A <select id="compareDocA"></select></label>
+      <label>Document B <select id="compareDocB"></select></label>
+      <button class="btn btn-primary" id="runCompareBtn">Compare</button>
+    </div>
+    <div class="compare-filters" id="compareFilters"></div>
+    <div id="compareSummary" class="compare-summary"></div>
+    <div id="compareResults" class="compare-results"></div>
+  </section>
+
+  <!-- ASK -->
+  <section id="tab-ask" class="tab-panel">
+    <h1>Ask Your Document</h1>
+    <div class="ask-doc-picker">
+      <p>Documents included in this conversation:</p>
+      <div id="askDocPicker" class="chip-picker"></div>
+    </div>
+    <div id="crossDocPanel" class="cross-doc-panel" hidden>
+      <p class="muted small">Two documents selected — you can also ask a <b>cross-document</b> question (Module 7: Multi-Document Questions), which retrieves evidence from each document separately and reasons about the relationship between them.</p>
+      <form id="crossDocForm" class="ask-form">
+        <input type="text" id="crossDocInput" placeholder="e.g. Do these two agreements have different termination conditions?" autocomplete="off" />
+        <button class="btn btn-secondary" type="submit">Ask across documents</button>
+      </form>
+      <div id="crossDocResult"></div>
+    </div>
+    <div id="askThread" class="ask-thread"></div>
+    <form id="askForm" class="ask-form">
+      <input type="text" id="askInput" placeholder="e.g. What happens if I terminate this agreement?" autocomplete="off" />
+      <button class="btn btn-primary" type="submit">Ask</button>
+    </form>
+    <div class="scenario-chips">
+      <span class="muted small">Try:</span>
+      <button class="chip" data-q="What happens if I terminate this agreement?">What happens if I terminate?</button>
+      <button class="chip" data-q="How much do I have to pay?">How much do I have to pay?</button>
+      <button class="chip" data-q="What happens to my intellectual property?">What about my IP?</button>
+      <button class="chip" data-q="What are my responsibilities?">What are my responsibilities?</button>
+    </div>
+  </section>
+
+  <!-- ACTION PLAN -->
+  <section id="tab-actionplan" class="tab-panel">
+    <h1>Action Plan</h1>
+    <div class="workspace-select">
+      <label for="actionPlanDocSelect">Document:</label>
+      <select id="actionPlanDocSelect"></select>
+      <button class="btn btn-primary" id="generatePlanBtn">Generate Action Plan</button>
+    </div>
+    <div id="actionPlanResults" class="action-plan-grid"></div>
+  </section>
+
+  <!-- CONSULTATION BRIEF -->
+  <section id="tab-brief" class="tab-panel">
+    <h1>Prepare for Legal Consultation</h1>
+    <div class="brief-picker">
+      <p>Select documents to include:</p>
+      <div id="briefDocPicker" class="chip-picker"></div>
+      <label class="block-label">Your concerns (optional)
+        <textarea id="briefConcerns" rows="2" placeholder="e.g. I'm worried about the non-compete clause"></textarea>
+      </label>
+      <button class="btn btn-primary" id="generateBriefBtn">Generate Brief</button>
+    </div>
+    <div id="briefResult" class="brief-result"></div>
+  </section>
+
+  <!-- PRIVACY -->
+  <section id="tab-privacy" class="tab-panel">
+    <h1>Privacy &amp; Settings</h1>
+    <div class="card">
+      <h2>What LexGuide AI does with your documents</h2>
+      <ul>
+        <li>Documents are processed locally by this application to extract text, detect clauses, and answer questions.</li>
+        <li>By default the AI provider is a fully offline, deterministic "Demo" engine — nothing leaves this server.</li>
+        <li>If an external AI provider is enabled by the operator, only clause excerpts relevant to a specific request are sent, never entire raw files, unless explicitly configured otherwise.</li>
+        <li>You can delete any single document, or all data, at any time below.</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h2>Manage your data</h2>
+      <div id="privacyDocList" class="doc-list"></div>
+      <button class="btn btn-danger" id="deleteAllBtn">Delete All Data</button>
+    </div>
+    <div class="card">
+      <h2>API status</h2>
+      <div id="apiStatus" class="muted small">Checking…</div>
+    </div>
+  </section>
+
+</main>
+
+<div id="guidedOverlay" class="guided-overlay" hidden>
+  <div class="guided-box">
+    <div class="guided-progress"><div id="guidedProgressBar"></div></div>
+    <div id="guidedStepText"></div>
+    <div class="guided-actions">
+      <button class="btn btn-ghost" id="guidedSkip">Skip Demo</button>
+      <button class="btn btn-primary" id="guidedNext">Next →</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+
+<script src="config.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

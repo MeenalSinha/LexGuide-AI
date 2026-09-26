@@ -1,0 +1,46 @@
+# LexGuide AI — local/demo compose file.
+#
+# This runs the prototype exactly as built: FastAPI backend (SQLite by
+# default) + static frontend. Postgres and Redis services are included,
+# commented out, as the documented production upgrade path described in
+# docs/architecture.md (swap DATABASE_URL to point at `postgres` and add
+# pgvector + Celery workers once the product moves beyond prototype scale).
+version: "3.9"
+
+services:
+  backend:
+    build: ./backend
+    ports:
+      - "8000:8000"
+    environment:
+      - ENV=development
+      - DATABASE_URL=sqlite:///./lexguide.db
+      - LLM_PROVIDER=demo
+      - CORS_ORIGINS=http://localhost:8080,*
+    volumes:
+      - backend_storage:/app/storage
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "8080:8080"
+    depends_on:
+      - backend
+
+  # --- Production upgrade path (not used by default) ---------------------
+  # postgres:
+  #   image: pgvector/pgvector:pg16
+  #   environment:
+  #     POSTGRES_DB: lexguide
+  #     POSTGRES_USER: lexguide
+  #     POSTGRES_PASSWORD: lexguide
+  #   ports: ["5432:5432"]
+  #   volumes: ["pg_data:/var/lib/postgresql/data"]
+  #
+  # redis:
+  #   image: redis:7
+  #   ports: ["6379:6379"]
+
+volumes:
+  backend_storage:
+  # pg_data:

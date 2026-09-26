@@ -1,0 +1,24 @@
+MUTUAL NON-DISCLOSURE AGREEMENT
+
+This Non-Disclosure Agreement ("Agreement") is between NovaTech Solutions Pvt. Ltd. ("Disclosing Party") and the Receiving Party identified in the signature block.
+
+1. EFFECTIVE DATE
+Effective Date: January 1, 2026.
+
+2. DEFINITION OF CONFIDENTIAL INFORMATION
+"Confidential Information" means any non-public business, technical, or financial information disclosed by either party.
+
+3. OBLIGATIONS
+The Receiving Party shall not disclose Confidential Information to any third party and shall use it solely for the purpose of evaluating a potential business relationship. The Receiving Party agrees to return or destroy all Confidential Information within 30 days of a written request.
+
+4. TERM
+This Agreement shall remain in effect for 2 years from the Effective Date, and the confidentiality obligations shall survive for an additional 3 years after termination.
+
+5. EXCLUSIONS
+This Agreement does not apply to information that is publicly available, independently developed, or rightfully received from a third party.
+
+6. REMEDIES
+The parties agree that a breach of this Agreement may cause irreparable harm, entitling the non-breaching party to seek injunctive relief in addition to other remedies.
+
+7. GOVERNING LAW
+This Agreement shall be governed by the laws of India, with disputes subject to the jurisdiction of the courts of Bangalore.

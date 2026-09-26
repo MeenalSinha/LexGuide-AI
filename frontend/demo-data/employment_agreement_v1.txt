@@ -1,0 +1,36 @@
+EMPLOYMENT AGREEMENT
+
+This Employment Agreement ("Agreement") is entered into between NovaTech Solutions Pvt. Ltd. (the "Company") and the undersigned Employee (the "Employee").
+
+1. EFFECTIVE DATE
+Effective Date: January 1, 2026. This Agreement shall commence on the Effective Date and continue until terminated as provided herein.
+
+2. POSITION AND DUTIES
+The Employee shall serve as Software Engineer and agrees to perform duties assigned by the Company in good faith.
+
+3. COMPENSATION
+The Company shall pay the Employee a monthly salary of INR 85,000, payable by the 5th of each following month. The Employee agrees to submit a monthly timesheet by the 5th of each month.
+
+4. CONFIDENTIALITY
+The Employee agrees to keep confidential all proprietary information of the Company, both during and after employment. This confidentiality obligation is perpetual and survives termination of this Agreement.
+
+5. INTELLECTUAL PROPERTY
+All inventions, work product, and intellectual property created by the Employee during the course of employment shall be the sole and exclusive property of the Company.
+
+6. NON-COMPETE
+The Employee shall not engage in any competing business within 12 months after termination of this Agreement, within India.
+
+7. TERMINATION
+The Company may terminate this Agreement without prior notice in cases of misconduct. In all other cases, either party may terminate this Agreement with 30 days written notice.
+
+8. LIABILITY
+The Company's liability under this Agreement shall be limited except in cases of gross negligence.
+
+9. DISPUTE RESOLUTION
+Any disputes arising from this Agreement shall be resolved through arbitration in Bangalore, India, in accordance with the Arbitration and Conciliation Act.
+
+10. GOVERNING LAW
+This Agreement shall be governed by the laws of India.
+
+11. DATA PROTECTION
+The Employee's personal data shall be processed in accordance with the Company's privacy policy and applicable data protection law.
