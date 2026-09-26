@@ -15,13 +15,8 @@ function $(sel, root = document) { return root.querySelector(sel); }
 function $all(sel, root = document) { return [...root.querySelectorAll(sel)]; }
 
 async function api(path, options = {}) {
-  const headers = options.body instanceof FormData
-    ? {}
-    : options.body
-      ? { "Content-Type": "application/json" }
-      : {};
   const res = await fetch(`${API_BASE}${path}`, {
-    headers,
+    headers: options.body instanceof FormData ? {} : { "Content-Type": "application/json" },
     ...options,
   });
   if (!res.ok) {
@@ -78,15 +73,9 @@ function activateTab(name) {
 }
 
 // ---------------- Document loading ----------------
-let documentsLoadPromise = null;
 async function loadDocuments() {
-  // Coalesce overlapping refreshes from tab activation and dashboard updates.
-  if (!documentsLoadPromise) {
-    documentsLoadPromise = api("/documents")
-      .then(documents => { state.documents = documents; return documents; })
-      .finally(() => { documentsLoadPromise = null; });
-  }
-  return documentsLoadPromise;
+  state.documents = await api("/documents");
+  return state.documents;
 }
 
 async function uploadFile(file) {
@@ -219,17 +208,15 @@ async function refreshDashboard() {
     return;
   }
 
-  const insights = await Promise.all(state.documents.slice(0, 6).map(async doc => {
-    try { return { doc, ins: await getInsights(doc.id) }; }
-    catch (_) { return null; }
-  }));
   let totalAttn = 0, totalDeadlines = 0;
   const deadlineLines = [];
-  for (const item of insights.filter(Boolean)) {
-    const { doc, ins } = item;
-    totalAttn += (ins.attention_counts.HIGH || 0) + (ins.attention_counts.MEDIUM || 0);
-    totalDeadlines += ins.deadlines.length;
-    ins.deadlines.slice(0, 2).forEach(d => deadlineLines.push(`${escapeHtml(doc.filename)}: ${escapeHtml(d.date_text)}`));
+  for (const doc of state.documents.slice(0, 6)) {
+    try {
+      const ins = await getInsights(doc.id);
+      totalAttn += (ins.attention_counts.HIGH || 0) + (ins.attention_counts.MEDIUM || 0);
+      totalDeadlines += ins.deadlines.length;
+      ins.deadlines.slice(0, 2).forEach(d => deadlineLines.push(`${escapeHtml(doc.filename)}: ${escapeHtml(d.date_text)}`));
+    } catch (_) {}
   }
   $("#dashAttention").innerHTML = `<b style="font-size:1.4rem">${totalAttn}</b> clause(s) across your documents may warrant review.`;
   $("#dashDeadlines").innerHTML = totalDeadlines

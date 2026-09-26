@@ -12,7 +12,6 @@ API key. AnthropicLLMProvider is a thin real implementation used when
 ANTHROPIC_API_KEY is configured.
 """
 from abc import ABC, abstractmethod
-from functools import lru_cache
 from typing import List, Dict
 
 
@@ -158,9 +157,7 @@ class AnthropicLLMProvider(LLMProvider):
             return self._fallback.answer_question(question, evidence_chunks)
 
 
-@lru_cache(maxsize=1)
 def get_llm_provider() -> LLMProvider:
-    """Reuse the configured provider and its fallback client across requests."""
     from app.core.config import settings
     if settings.LLM_PROVIDER == "anthropic" and settings.ANTHROPIC_API_KEY:
         return AnthropicLLMProvider(settings.ANTHROPIC_API_KEY)
