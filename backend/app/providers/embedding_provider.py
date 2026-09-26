@@ -9,6 +9,7 @@ keyword overlap + metadata filter) so swapping the backend doesn't change
 callers in rag_service.py.
 """
 from abc import ABC, abstractmethod
+from functools import lru_cache
 from typing import List, Dict
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
@@ -89,5 +90,7 @@ class TfidfEmbeddingProvider(EmbeddingProvider):
         return reranked
 
 
+@lru_cache(maxsize=1)
 def get_embedding_provider() -> EmbeddingProvider:
+    """Reuse the stateless retriever across requests instead of allocating it per query."""
     return TfidfEmbeddingProvider()

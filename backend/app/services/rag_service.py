@@ -23,7 +23,10 @@ def answer_question(db: Session, question: str, document_ids: List[str]) -> Dict
     all_chunks = chunks_q.all()
 
     chunk_dicts = []
-    doc_names = {d.id: d.filename for d in db.query(Document).all()}
+    doc_query = db.query(Document.id, Document.filename)
+    if document_ids:
+        doc_query = doc_query.filter(Document.id.in_(document_ids))
+    doc_names = {doc_id: filename for doc_id, filename in doc_query.all()}
     for c in all_chunks:
         chunk_dicts.append({
             "id": c.id, "document_id": c.document_id,
@@ -70,11 +73,17 @@ def cross_document_relationship(db: Session, doc_a_id: str, doc_b_id: str, quest
     Also runs conflict/contradiction detection (spec §F) between the two
     documents' shared clause categories."""
     embedder = get_embedding_provider()
-    docs = {d.id: d for d in db.query(Document).all()}
+    requested_ids = [doc_a_id, doc_b_id]
+    docs = {d.id: d for d in db.query(Document).filter(Document.id.in_(requested_ids)).all()}
     doc_names = {i: d.filename for i, d in docs.items()}
 
+    chunks_by_doc = {doc_id: [] for doc_id in requested_ids}
+    chunks = db.query(DocumentChunk).filter(DocumentChunk.document_id.in_(requested_ids)).all()
+    for chunk in chunks:
+        chunks_by_doc.setdefault(chunk.document_id, []).append(chunk)
+
     def top_for(doc_id):
-        chunks = db.query(DocumentChunk).filter(DocumentChunk.document_id == doc_id).all()
+        chunks = chunks_by_doc.get(doc_id, [])
         dicts = [{"id": c.id, "document_id": c.document_id, "document_name": doc_names.get(doc_id, ""),
                   "page": c.page, "section": c.section, "text": c.text} for c in chunks]
         return embedder.retrieve(question, dicts, 3)
